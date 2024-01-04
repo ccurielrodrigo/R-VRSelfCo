@@ -1,9 +1,26 @@
 <!DOCTYPE html>
-   <head>
-      <title>{{ title }}</title>
-   </head>
-   <body>
-      <h1>Hello, World!</h1>
-      <h2>The date and time on the server is: {{ time }}</h2>
-   </body>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Motor Control</h1>
+    <h2>Status: <span id="motor-status">{{ motor_status }}</span></h2>
+    <button id="toggle-button">Toggle Motor</button>
+
+    <script>
+    $(document).ready(function () {
+        $("#toggle-button").click(function () {
+            $.post("/toggle_motor", function (data) {
+                // Update the #motor-status element
+                $("#motor-status").text(data);
+            });
+        });
+    });
+</script>
+
+</body>
 </html>
+
