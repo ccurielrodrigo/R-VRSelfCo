@@ -27,12 +27,7 @@ GPIO_PINS = {
         "STEP" : 16,
         "DIR" : 18
     }
-}
-
-# Speed variables
-MOTOR_CONFIG = {
-    "DELAY_BETWEEN_STEPS" : 0.0005, 
-}               
+}           
 
 # Setup pin layout on PI
 GPIO.setmode(GPIO.BOARD)
@@ -72,13 +67,14 @@ def step_post():
     # Obtain the number of steps and direction
     steps = data.get('steps')
     direction = data.get('direction')
+    speed = data,get('speed')
 
     # Validate the information obtained
-    if steps is None or direction is None:
+    if steps is None or direction is None or speed is None:
         return {"error": "Missing steps or direction"}, 400
 
     # Perform the actual step increase
-    status = set_steps(steps, direction)
+    status = set_steps(steps, direction, speed)
 
     # Return a success response
     return {"status": status}, 200
@@ -91,7 +87,7 @@ FUNCTIONS
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 '''
 # Function to increase or decrease steps from the exotendon
-def set_steps(steps : int, direction : str):
+def set_steps(steps : int, speed: float, direction : str):
     # Check if there is any process happening
     global process_happening
     if (process_happening):
@@ -111,10 +107,10 @@ def set_steps(steps : int, direction : str):
     for x in range(steps):
         GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.HIGH)
         GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.HIGH)
-        sleep(MOTOR_CONFIG['DELAY_BETWEEN_STEPS'])
+        sleep(speed)
         GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.LOW)
         GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.LOW)
-        sleep(MOTOR_CONFIG['DELAY_BETWEEN_STEPS'])
+        sleep(speed)
 
     # Stop the process and return success
     process_happening = False

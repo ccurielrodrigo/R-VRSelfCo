@@ -4,6 +4,20 @@
 <head>
     <title>{{ title }}</title>
     <link rel="stylesheet" href="../static/style.css">
+    <style>
+        /* Style to align form fields horizontally */
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .form-row label,
+        .form-row input,
+        .form-row select {
+            margin-right: 10px;
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
@@ -13,30 +27,41 @@
     <!-- Motor Step Control Form -->
     <h2>Control Motor Steps</h2>
     <form id="step-form">
-        <label for="steps">Steps:</label>
-        <input type="number" id="steps" name="steps" required>
-        <label for="direction">Direction:</label>
-        <select id="direction" name="direction" required>
-            <option value="OPEN">Open</option>
-            <option value="CLOSE">Close</option>
-        </select>
+        <div class="form-row">
+            <label for="steps">Steps:</label>
+            <input type="number" id="steps" name="steps" required value="800">
+        </div>
+        <div class="form-row">
+            <label for="speed">Speed:</label>
+            <input type="number" id="speed" name="speed" required value="0.0005">
+        </div>
+        <div class="form-row">
+            <label for="direction">Direction:</label>
+            <select id="direction" name="direction" required>
+                <option value="OPEN">Open</option>
+                <option value="CLOSE">Close</option>
+            </select>
+        </div>
         <button type="submit">Submit</button>
     </form>
 
     <script>
         $(document).ready(function () {
-            // Handle the submission of the step form
+            // ... existing JavaScript code ...
+
+            // Update the submission handler to include speed
             $("#step-form").submit(function (event) {
                 event.preventDefault();
                 var steps = $("#steps").val();
                 var direction = $("#direction").val();
+                var speed = $("#speed").val();
                 $.ajax({
                     url: '/step',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({ steps: parseInt(steps), direction: direction }),
+                    data: JSON.stringify({ steps: parseInt(steps), direction: direction, speed: parseFloat(speed) }),
                     success: function (response) {
-                        console.log("Motor moved " + steps + " steps " + direction);
+                        console.log("Motor moved " + steps + " steps " + direction + " at speed " + speed);
                     },
                     error: function (response) {
                         alert("Error: " + response.responseText);
@@ -45,7 +70,6 @@
             });
         });
     </script>
-
 </body>
 
 </html>
