@@ -9,8 +9,6 @@
 
 <body>
     <h1>Motor Control</h1>
-    <h2>Status: <span id="motor-status">{{ motor_status }}</span></h2>
-    <button id="toggle-button">Toggle Motor</button>
 
     <!-- Motor Step Control Form -->
     <h2>Control Motor Steps</h2>
@@ -45,7 +43,7 @@
                     contentType: 'application/json',
                     data: JSON.stringify({ steps: parseInt(steps), direction: direction }),
                     success: function (response) {
-                        alert("Motor moved " + steps + " steps " + direction);
+                        console.log("Motor moved " + steps + " steps " + direction);
                     },
                     error: function (response) {
                         alert("Error: " + response.responseText);
