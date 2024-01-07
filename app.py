@@ -1,75 +1,132 @@
-# Imports
+'''
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+IMPORTS
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+'''
 from flask import Flask, render_template, request
 import RPi.GPIO as GPIO
 from time import sleep
 
-# Initialize GPIO pins
-DELAY_BETWEEN_STEPS = 0.0005  # Adjust this value for speed control
-CYCLES = 500
 
-# Direction pin from controller
-DIR = 10
-# Step pin from controller
-STEP = 8
-# 0/1 used to signify clockwise or counterclockwise.
-CW = 1
-CCW = 0
+'''
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+GLOBAL INSTANCES
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+'''
+# Direction and step pins (palm and dorso of the hand)
+GPIO_PINS = {
+    'PALM' : {
+        "STEP" : 8,                        
+        "DIR" : 10 
+    },
+    'DORSO' : {
+        "STEP" : 16,
+        "DIR" : 18
+    },
+
+}
+
+# Speed variables
+MOTOR_CONFIG = {
+    "DELAY_BETWEEN_STEPS" : 0.0005, 
+    "CYCLES_PER_TURN" : 200
+}               
 
 # Setup pin layout on PI
 GPIO.setmode(GPIO.BOARD)
 
-# Establish Pins in software
-GPIO.setup(DIR, GPIO.OUT)
-GPIO.setup(STEP, GPIO.OUT)
+# Indicate the GPIO's usage to the board
+GPIO.setup(GPIO_PINS['PALM']['STEP'], GPIO.OUT)
+GPIO.setup(GPIO_PINS['PALM']['DIR'], GPIO.OUT)
+GPIO.setup(GPIO_PINS['DORSO']['STEP'], GPIO.OUT)
+GPIO.setup(GPIO_PINS['DORSO']['DIR'], GPIO.OUT)
 
-# Set the first direction you want it to spin
-GPIO.output(DIR, CW)
+# Global variable to check if there is any process happening (avoids command override and mechanical issues)
+process_happening = False
 
 # Instance the app
 app = Flask(__name__)
 
-# Global variable for motor status
-motor_status = False
-
-# Function to toggle motor
-def toggle_motor():
-    global motor_status
-    motor_status = not motor_status
-    if motor_status:
-        # Code to start the motor
-        GPIO.output(DIR, CW)
-
-        # Run for 200 steps at a speed determined by DELAY_BETWEEN_STEPS
-        for x in range(CYCLES):
-            GPIO.output(STEP, GPIO.HIGH)
-            sleep(DELAY_BETWEEN_STEPS)
-            GPIO.output(STEP, GPIO.LOW)
-            sleep(DELAY_BETWEEN_STEPS)
-        pass
-    else:
-    	# Code to stop the motor here
-        GPIO.output(DIR, CCW)
-        for x in range(CYCLES):
-            GPIO.output(STEP, GPIO.HIGH)
-            sleep(DELAY_BETWEEN_STEPS)
-            GPIO.output(STEP, GPIO.LOW)
-            sleep(DELAY_BETWEEN_STEPS)
-        pass
-
-# Endpoints
+'''
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ENDPOINTS
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+'''
 @app.route('/')
 def index():
     templateData = {
         'title': 'Motor Control',
-        'motor_status': 'On' if motor_status else 'Off'
     }
     return render_template('index.html', **templateData)
 
-@app.route('/toggle_motor', methods=['POST'])
-def handle_toggle_motor():
-    toggle_motor()
-    return 'On' if motor_status else 'Off'
+# Increase or decrease N steps from the exotendon
+@app.route('/step', methods=['POST'])
+    # Parse the request's body
+    data = request.get_json()
 
-# Runtime configuration
+    # Obtain the number of steps and direction
+    steps = data.get('steps')
+    direction = data.get('direction')
+
+    # Validate the information obtained
+    if steps is None or direction is None:
+        return {"error": "Missing steps or direction"}, 400
+
+    # Perform the actual step increase
+    status = set_steps(steps, direction)
+
+    # Return a success response
+    return {"status": status}, 200
+
+'''
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+FUNCTIONS
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+'''
+# Function to increase or decrease steps from the exotendon
+def set_steps(steps : int, direction : str):
+    # Check if there is any process happening
+    global process_happening
+    if (process_happening):
+        return False
+
+    # No process happening now. Rise it to avoid mechanical override
+    process_happening = True
+
+    # Set each motor's direction
+    if direction == "OPEN":
+        GPIO.output(GPIO_PINS['PALM']['DIR'], 0)
+        GPIO.output(GPIO_PINS['DORSO']['DIR'], 1)
+    else:
+        GPIO.output(GPIO_PINS['PALM']['DIR'], 1)
+        GPIO.output(GPIO_PINS['DORSO']['DIR'], 0)
+
+    for x in range(steps):
+        GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.HIGH)
+        GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.HIGH)
+        sleep(MOTOR_CONFIG['DELAY_BETWEEN_STEPS'])
+
+    # Stop the process and return success
+    process_happening = False
+    return True
+
+'''
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+RUNTIME CONFIGURATION
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+'''
 if __name__ == '__main__':
-    app.run(debug=True, port=5000, host='0.0.0.0')
+    try:
+        app.run(debug=True, port=5000, host='0.0.0.0')
+    finally:
+        GPIO.cleanup()
