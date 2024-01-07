@@ -104,11 +104,13 @@ def set_steps(steps : int, direction : str):
 
     # Set each motor's direction
     if direction == "OPEN":
+        print("OPEN")
         GPIO.output(GPIO_PINS['PALM']['DIR'], 1)
-        GPIO.output(GPIO_PINS['DORSO']['DIR'], 1)
-    else:
-        GPIO.output(GPIO_PINS['PALM']['DIR'], 0)
         GPIO.output(GPIO_PINS['DORSO']['DIR'], 0)
+    else:
+        print("CLOSE")
+        GPIO.output(GPIO_PINS['PALM']['DIR'], 0)
+        GPIO.output(GPIO_PINS['DORSO']['DIR'], 1)
 
     for x in range(steps):
         GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.HIGH)
