@@ -64,26 +64,17 @@ def step_post():
     # Parse the request's body
     data = request.get_json()
 
-    # Obtain the number of steps, direction, and speed from the request data
+    # Obtain the number of steps and direction
     steps = data.get('steps')
     direction = data.get('direction')
     speed = data.get('speed')
 
-    # Convert steps to integer and speed to float
-    try:
-        steps = int(steps)
-        speed = float(speed)
-    except ValueError:
-        # Handle the error if the conversion fails
-        return {"error": "Invalid input for steps or speed"}, 400
-
     # Validate the information obtained
     if steps is None or direction is None or speed is None:
-        return {"error": "Missing steps, direction, or speed"}, 400
-
+        return {"error": "Missing steps or direction"}, 400
 
     # Perform the actual step increase
-    status = set_steps(steps, direction, speed)
+    status = set_steps(steps, speed, direction)
 
     # Return a success response
     return {"status": status}, 200
