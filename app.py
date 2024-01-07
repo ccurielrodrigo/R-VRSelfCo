@@ -32,7 +32,7 @@ GPIO_PINS = {
 
 # Speed variables
 MOTOR_CONFIG = {
-    "DELAY_BETWEEN_STEPS" : 0.0005, 
+    "DELAY_BETWEEN_STEPS" : 0.00009, 
     "CYCLES_PER_TURN" : 200
 }               
 
