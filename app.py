@@ -67,6 +67,7 @@ def index():
 
 # Increase or decrease N steps from the exotendon
 @app.route('/step', methods=['POST'])
+def step_post():
     # Parse the request's body
     data = request.get_json()
 
