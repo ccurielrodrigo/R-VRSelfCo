@@ -26,9 +26,10 @@ GPIO_PINS = {
     'DORSO' : {
         "STEP" : 16,
         "DIR" : 18
-    },
-
+    }
 }
+
+print(GPIO_PINS)
 
 # Speed variables
 MOTOR_CONFIG = {
