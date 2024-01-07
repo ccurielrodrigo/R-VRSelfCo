@@ -114,6 +114,9 @@ def set_steps(steps : int, direction : str):
         GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.HIGH)
         GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.HIGH)
         sleep(MOTOR_CONFIG['DELAY_BETWEEN_STEPS'])
+        GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.LOW)
+        GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.LOW)
+        sleep(MOTOR_CONFIG['DELAY_BETWEEN_STEPS'])
 
     # Stop the process and return success
     process_happening = False
