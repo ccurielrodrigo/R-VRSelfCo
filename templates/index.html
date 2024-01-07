@@ -25,13 +25,6 @@
 
     <script>
         $(document).ready(function () {
-            $("#toggle-button").click(function () {
-                $.post("/toggle_motor", function (data) {
-                    // Update the #motor-status element
-                    $("#motor-status").text(data);
-                });
-            });
-
             // Handle the submission of the step form
             $("#step-form").submit(function (event) {
                 event.preventDefault();

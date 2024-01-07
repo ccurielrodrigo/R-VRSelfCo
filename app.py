@@ -29,12 +29,9 @@ GPIO_PINS = {
     }
 }
 
-print(GPIO_PINS)
-
 # Speed variables
 MOTOR_CONFIG = {
-    "DELAY_BETWEEN_STEPS" : 0.00009, 
-    "CYCLES_PER_TURN" : 200
+    "DELAY_BETWEEN_STEPS" : 0.0005, 
 }               
 
 # Setup pin layout on PI
@@ -105,11 +102,9 @@ def set_steps(steps : int, direction : str):
 
     # Set each motor's direction
     if direction == "OPEN":
-        print("OPEN")
         GPIO.output(GPIO_PINS['PALM']['DIR'], 1)
         GPIO.output(GPIO_PINS['DORSO']['DIR'], 0)
     else:
-        print("CLOSE")
         GPIO.output(GPIO_PINS['PALM']['DIR'], 0)
         GPIO.output(GPIO_PINS['DORSO']['DIR'], 1)
 
