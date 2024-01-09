@@ -77,7 +77,7 @@ def tune_post():
         return {"error": "Missing 'steps', 'direction' or 'speed'"}, 400
 
     # Perform the actual step increase
-    status = set_steps(steps, speed, direction)
+    status = tune_post(steps, speed, direction)
 
     # Return a success response
     return {"status": status}, 200
