@@ -42,7 +42,8 @@ GPIO.setup(GPIO_PINS['DORSO']['DIR'], GPIO.OUT)
 process_happening = False
 
 # Global variable to meassure steps from open state (0) to closed state (#)
-steps_taken = 0
+current_status = 0
+max_steps = 800
 
 # Instance the app
 app = Flask(__name__)
@@ -82,7 +83,7 @@ def tune_post():
     # Return a success response
     return {"status": status}, 200
 
-# Increase or decrease N steps from the exotendon
+# Setup the open or closed state
 @app.route('/setup', methods=['POST'])
 def setup_post():
     # Parse the request's body
@@ -96,14 +97,15 @@ def setup_post():
         return {"error": "Missing 'command'"}, 400
 
     # Perform the actual step increase
-    print ('command')
+    print (command)
+    status = False
 
     # Return a success response
     return {"status": status}, 200
 
-# Increase or decrease N steps from the exotendon
-@app.route('/command', methods=['POST'])
-def command_post():
+# Control for opening or closing
+@app.route('/control', methods=['POST'])
+def control_post():
     # Parse the request's body
     data = request.get_json()
 
@@ -115,7 +117,8 @@ def command_post():
         return {"error": "Missing 'command'"}, 400
 
     # Perform the actual step increase
-    print ('command')
+    print (command)
+    status = False
 
     # Return a success response
     return {"status": status}, 200
