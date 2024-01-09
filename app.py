@@ -41,6 +41,9 @@ GPIO.setup(GPIO_PINS['DORSO']['DIR'], GPIO.OUT)
 # Global variable to check if there is any process happening (avoids command override and mechanical issues)
 process_happening = False
 
+# Global variable to meassure steps from open state (0) to closed state (#)
+steps_taken = 0
+
 # Instance the app
 app = Flask(__name__)
 
@@ -59,8 +62,8 @@ def index():
     return render_template('index.html', **templateData)
 
 # Increase or decrease N steps from the exotendon
-@app.route('/step', methods=['POST'])
-def step_post():
+@app.route('/tune', methods=['POST'])
+def tune_post():
     # Parse the request's body
     data = request.get_json()
 
@@ -71,10 +74,48 @@ def step_post():
 
     # Validate the information obtained
     if steps is None or direction is None or speed is None:
-        return {"error": "Missing steps or direction"}, 400
+        return {"error": "Missing 'steps', 'direction' or 'speed'"}, 400
 
     # Perform the actual step increase
     status = set_steps(steps, speed, direction)
+
+    # Return a success response
+    return {"status": status}, 200
+
+# Increase or decrease N steps from the exotendon
+@app.route('/setup', methods=['POST'])
+def setup_post():
+    # Parse the request's body
+    data = request.get_json()
+
+    # Obtain the number of steps and direction
+    command = data.get('command')
+
+    # Validate the information obtained
+    if command is None:
+        return {"error": "Missing 'command'"}, 400
+
+    # Perform the actual step increase
+    print ('command')
+
+    # Return a success response
+    return {"status": status}, 200
+
+# Increase or decrease N steps from the exotendon
+@app.route('/command', methods=['POST'])
+def command_post():
+    # Parse the request's body
+    data = request.get_json()
+
+    # Obtain the number of steps and direction
+    command = data.get('command')
+
+    # Validate the information obtained
+    if command is None:
+        return {"error": "Missing 'command'"}, 400
+
+    # Perform the actual step increase
+    print ('command')
 
     # Return a success response
     return {"status": status}, 200
@@ -87,7 +128,7 @@ FUNCTIONS
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 '''
 # Function to increase or decrease steps from the exotendon
-def set_steps(steps : int, speed: float, direction : str):
+def tune_post(steps : int, speed: float, direction : str):    
     # Check if there is any process happening
     global process_happening
     if (process_happening):
@@ -104,6 +145,7 @@ def set_steps(steps : int, speed: float, direction : str):
         GPIO.output(GPIO_PINS['PALM']['DIR'], 0)
         GPIO.output(GPIO_PINS['DORSO']['DIR'], 1)
 
+    # Perform the steps
     for x in range(steps):
         GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.HIGH)
         GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.HIGH)

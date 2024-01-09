@@ -24,9 +24,9 @@
 <body>
     <h1>Motor Control</h1>
 
-    <!-- Motor Step Control Form -->
-    <h2>Control Motor Steps</h2>
-    <form id="step-form">
+    <!-- Exo-tendon fine tunning -->
+    <h2>Fine tune</h2>
+    <form id="tune-form">
         <div class="form-row">
             <label for="steps">Steps:</label>
             <input type="number" id="steps" name="steps" required value="800">
@@ -45,18 +45,30 @@
         <button type="submit">Submit</button>
     </form>
 
+    <!-- Exotendon Setup -->
+    <h2>Setup</h2>
+    <form id="setup-form">
+        <button type="button" id="set-open" onclick="sendSetupCommand('SET_OPEN')">Set Open</button>
+        <button type="button" id="set-close" onclick="sendSetupCommand('SET_CLOSE')">Set Close</button>
+    </form>
+
+    <!-- Exotendon control -->
+    <h2>Control</h2>
+    <form id="control-form">
+        <button type="button" id="open" onclick="sendCommand('OPEN')">Open</button>
+        <button type="button" id="close" onclick="sendCommand('CLOSE')">Close</button>
+    </form>
+
     <script>
         $(document).ready(function () {
-            // ... existing JavaScript code ...
-
-            // Update the submission handler to include speed
-            $("#step-form").submit(function (event) {
+            // Fine tune
+            $("#tune-form").submit(function (event) {
                 event.preventDefault();
                 var steps = $("#steps").val();
                 var direction = $("#direction").val();
                 var speed = $("#speed").val();
                 $.ajax({
-                    url: '/step',
+                    url: '/tune',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({ steps: parseInt(steps), direction: direction, speed: parseFloat(speed) }),
@@ -68,6 +80,38 @@
                     }
                 });
             });
+
+            // Setup 
+            function sendSetupCommand(command) {
+                $.ajax({
+                    url: '/setup',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ command: command }),
+                    success: function (response) {
+                        console.log("Command sent: " + command);
+                    },
+                    error: function (response) {
+                        alert("Error: " + response.responseText);
+                    }
+                });
+            }
+
+            // Control 
+            function sendCommand(command) {
+                $.ajax({
+                    url: '/control',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ command: command }),
+                    success: function (response) {
+                        console.log("Command sent: " + command);
+                    },
+                    error: function (response) {
+                        alert("Error: " + response.responseText);
+                    }
+                });
+            }
         });
     </script>
 </body>
