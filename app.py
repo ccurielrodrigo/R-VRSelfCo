@@ -152,16 +152,16 @@ def tune_post(steps : int, speed: float, direction : str):
     # Perform the steps
     for x in range(steps):
         # HIGH step
-        if (direction_override == "NORMAL" || direction_override == "OPEN_ONLY")
+        if (direction_override == "NORMAL" or direction_override == "OPEN_ONLY")
             GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.HIGH)
-        if (direction_override == "NORMAL" || direction_override == "CLOSE_ONLY")
+        if (direction_override == "NORMAL" or direction_override == "CLOSE_ONLY")
             GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.HIGH)
         sleep(speed)
 
         # LOW step
-        if (direction_override == "NORMAL" || direction_override == "OPEN_ONLY")
+        if (direction_override == "NORMAL" or direction_override == "OPEN_ONLY")
             GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.LOW)
-        if (direction_override == "NORMAL" || direction_override == "CLOSE_ONLY")
+        if (direction_override == "NORMAL" or direction_override == "CLOSE_ONLY")
         GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.LOW)
         sleep(speed)
 
