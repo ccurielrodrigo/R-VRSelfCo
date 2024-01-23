@@ -132,7 +132,7 @@ FUNCTIONS
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 '''
 # Function to increase or decrease steps from the exotendon
-def tune_post(steps : int, speed: float, direction : str):    
+def tune_post(steps : int, speed: float, direction : str, direction_override : str):    
     # Check if there is any process happening
     global process_happening
     if (process_happening):
