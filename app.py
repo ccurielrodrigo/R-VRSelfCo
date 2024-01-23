@@ -20,12 +20,12 @@ GLOBAL INSTANCES
 # Direction and step pins (palm and dorso of the hand)
 GPIO_PINS = {
     'PALM' : {
-        "STEP" : 8,                        
-        "DIR" : 10 
+        "STEP" : 10,                        
+        "DIR" : 8 
     },
     'DORSO' : {
-        "STEP" : 16,
-        "DIR" : 18
+        "STEP" : 18,
+        "DIR" : 16
     }
 }           
 
@@ -74,14 +74,12 @@ def tune_post():
     direction_override = data.get('direction_override')
     speed = data.get('speed')
 
-    print(direction_override)
-
     # Validate the information obtained
     if steps is None or direction is None or speed is None:
         return {"error": "Missing 'steps', 'direction' or 'speed'"}, 400
 
     # Perform the actual step increase
-    status = tune_post(steps, speed, direction)
+    status = tune_post(steps, speed, direction, direction_override)
 
     # Return a success response
     return {"status": status}, 200
@@ -153,10 +151,17 @@ def tune_post(steps : int, speed: float, direction : str):
 
     # Perform the steps
     for x in range(steps):
-        GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.HIGH)
-        GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.HIGH)
+        # HIGH step
+        if (direction_override == "NORMAL" || direction_override == "OPEN_ONLY")
+            GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.HIGH)
+        if (direction_override == "NORMAL" || direction_override == "CLOSE_ONLY")
+            GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.HIGH)
         sleep(speed)
-        GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.LOW)
+
+        # LOW step
+        if (direction_override == "NORMAL" || direction_override == "OPEN_ONLY")
+            GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.LOW)
+        if (direction_override == "NORMAL" || direction_override == "CLOSE_ONLY")
         GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.LOW)
         sleep(speed)
 
