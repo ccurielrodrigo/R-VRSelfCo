@@ -162,7 +162,7 @@ def tune_post(steps : int, speed: float, direction : str):
         if (direction_override == "NORMAL" or direction_override == "OPEN_ONLY"):
             GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.LOW)
         if (direction_override == "NORMAL" or direction_override == "CLOSE_ONLY"):
-        GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.LOW)
+            GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.LOW)
         sleep(speed)
 
     # Stop the process and return success
