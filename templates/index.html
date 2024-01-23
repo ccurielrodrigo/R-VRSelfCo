@@ -42,6 +42,14 @@
                 <option value="CLOSE">Close</option>
             </select>
         </div>
+        <div class="form-row">
+            <label for="direction-override">Direction override:</label>
+            <select id="direction-override" name="direction-override" required>
+                <option value="NORMAL">Normal</option>
+                <option value="OPEN_ONLY">Open</option>
+                <option value="CLOSE_ONLY">Close</option>
+            </select>
+        </div>
         <button type="submit">Submit</button>
     </form>
 
@@ -66,12 +74,18 @@
                 event.preventDefault();
                 var steps = $("#steps").val();
                 var direction = $("#direction").val();
+                var directionOverride = $("#direction-override").val();
                 var speed = $("#speed").val();
                 $.ajax({
                     url: '/tune',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({ steps: parseInt(steps), direction: direction, speed: parseFloat(speed) }),
+                    data: JSON.stringify({
+                        steps: parseInt(steps),
+                        direction: direction,
+                        direction_override: directionOverride,
+                        speed: parseFloat(speed)
+                    }),
                     success: function (response) {
                         console.log("Motor moved " + steps + " steps " + direction + " at speed " + speed);
                     },

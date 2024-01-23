@@ -71,7 +71,10 @@ def tune_post():
     # Obtain the number of steps and direction
     steps = data.get('steps')
     direction = data.get('direction')
+    direction_override = data.get('direction_override')
     speed = data.get('speed')
+
+    print(direction_override)
 
     # Validate the information obtained
     if steps is None or direction is None or speed is None:
