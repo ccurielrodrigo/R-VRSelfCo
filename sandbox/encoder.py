@@ -2,8 +2,12 @@ import RPi.GPIO as GPIO
 from time import sleep
 
 # GPIO pins
+'''
 Enc_A = 17
 Enc_B = 27
+'''
+Enc_A = 10
+Enc_B = 9
 
 # Position counter
 counter = 0
