@@ -38,7 +38,7 @@ def main():
             A, B = read_encoder()
             update_position(A, B)
             print(f"Position: {counter}")
-            sleep(1)
+            sleep(.001)
     except KeyboardInterrupt:
         GPIO.cleanup()
         print("Program exited cleanly")
