@@ -6,16 +6,14 @@ counter = 10
 Enc_A = 17  
 Enc_B = 27  
 
-
 def init():
-    print "Rotary Encoder Test Program"
+    print("Rotary Encoder Test Program")
     GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(Enc_A, GPIO.IN)
     GPIO.setup(Enc_B, GPIO.IN)
     GPIO.add_event_detect(Enc_A, GPIO.RISING, callback=rotation_decode, bouncetime=10)
     return
-
 
 def rotation_decode(Enc_A):
     global counter
@@ -25,7 +23,7 @@ def rotation_decode(Enc_A):
 
     if (Switch_A == 1) and (Switch_B == 0):
         counter += 1
-        print "direction -> ", counter
+        print("direction -> ", counter)
         while Switch_B == 0:
             Switch_B = GPIO.input(Enc_B)
         while Switch_B == 1:
@@ -34,7 +32,7 @@ def rotation_decode(Enc_A):
 
     elif (Switch_A == 1) and (Switch_B == 1):
         counter -= 1
-        print "direction <- ", counter
+        print("direction <- ", counter)
         while Switch_A == 1:
             Switch_A = GPIO.input(Enc_A)
         return
@@ -44,7 +42,7 @@ def rotation_decode(Enc_A):
 def main():
     try:
         init()
-        while True :
+        while True:
             sleep(1)
 
     except KeyboardInterrupt:
