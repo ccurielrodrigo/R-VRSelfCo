@@ -17,33 +17,68 @@ GLOBAL INSTANCES
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 '''
+# ------------------------------------------------------> Constants and setup 
 # Direction and step pins (palm and dorso of the hand)
 GPIO_PINS = {
     'PALM' : {
+        # Motor
         "STEP" : 10,                        
-        "DIR" : 8 
+        "DIR" : 8,
+        # Encoder
+        "A" : 11,
+        "B" : 13
     },
     'DORSO' : {
+        # Motor
         "STEP" : 18,
-        "DIR" : 16
-    }
+        "DIR" : 16,
+        # Encoder
+        "A" : 19,
+        "B" : 21
+    },
 }           
 
-# Setup pin layout on PI
+# Board configuration
+# Setup pin layout on PI (use borad layout)
 GPIO.setmode(GPIO.BOARD)
-
-# Indicate the GPIO's usage to the board
+# Avoid warnings
+GPIO.setwarnings(False)
+# Motors
 GPIO.setup(GPIO_PINS['PALM']['STEP'], GPIO.OUT)
 GPIO.setup(GPIO_PINS['PALM']['DIR'], GPIO.OUT)
 GPIO.setup(GPIO_PINS['DORSO']['STEP'], GPIO.OUT)
 GPIO.setup(GPIO_PINS['DORSO']['DIR'], GPIO.OUT)
+# Encoders
+GPIO.setup(GPIO_PINS['PALM']['A'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(GPIO_PINS['PALM']['B'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(GPIO_PINS['DORSO']['A'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(GPIO_PINS['DORSO']['B'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+# Encoder/Motor-related
+MOTOR_SPEED = 0.0005
+DEBOUNCE_TIME = 0.001
+
+# ------------------------------------------------------> Global variables
+# Encoder positions
+ENCODERS = {
+    "PALM" : {
+        "LAST_A" : 0,
+        "LAST_B" : 0,
+        "MIN_POSITION" : 0,
+        "MAX_POSITION" : 0,
+        "CURRENT_POSITION" : 0
+    },
+    "DORSO" : {
+        "LAST_A" : 0,
+        "LAST_B" : 0,
+        "MIN_POSITION" : 0,
+        "MAX_POSITION" : 0,
+        "CURRENT_POSITION" : 0
+    },
+}
 
 # Global variable to check if there is any process happening (avoids command override and mechanical issues)
 process_happening = False
-
-# Global variable to meassure steps from open state (0) to closed state (#)
-current_status = 0
-max_steps = 800
 
 # Instance the app
 app = Flask(__name__)
@@ -83,48 +118,7 @@ def tune_post():
 
     # Return a success response
     return {"status": status}, 200
-
-# Setup the open or closed state
-''' @app.route('/setup', methods=['POST'])
-def setup_post():
-    # Parse the request's body
-    data = request.get_json()
-
-    # Obtain the number of steps and direction
-    command = data.get('command')
-
-    # Validate the information obtained
-    if command is None:
-        return {"error": "Missing 'command'"}, 400
-
-    # Perform the actual step increase
-    print (command)
-    status = False
-
-    # Return a success response
-    return {"status": status}, 200
-
-# Control for opening or closing
-@app.route('/control', methods=['POST'])
-def control_post():
-    # Parse the request's body
-    data = request.get_json()
-
-    # Obtain the number of steps and direction
-    command = data.get('command')
-
-    # Validate the information obtained
-    if command is None:
-        return {"error": "Missing 'command'"}, 400
-
-    # Perform the actual step increase
-    print (command)
-    status = False
-
-    # Return a success response
-    return {"status": status}, 200
-'''
-
+    
 '''
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
