@@ -2,8 +2,8 @@ import RPi.GPIO as GPIO
 from time import sleep
 
 # Encoder GPIO pins
-Enc_A = 10
-Enc_B = 9
+Enc_A = 19
+Enc_B = 21
 
 # Motor GPIO pins (example pins, adjust according to your setup)
 Motor_Dir = 8 # Motor direction pin
@@ -19,7 +19,7 @@ last_B = 0
 
 def init():
     GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)
+    GPIO.setmode(GPIO.BOARD)
     GPIO.setup(Enc_A, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(Enc_B, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(Motor_Dir, GPIO.OUT) 
