@@ -22,12 +22,12 @@ def init():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(Enc_A, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(Enc_B, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(Motor_Dir, GPIO.OUT)
+    GPIO.setup(Motor_Dir, GPIO.OUT) 
     GPIO.setup(Motor_Step, GPIO.OUT)
     
     # Initialize interrupt handlers for encoder
-    GPIO.add_event_detect(Enc_A, GPIO.BOTH, callback=update_position)
-    GPIO.add_event_detect(Enc_B, GPIO.BOTH, callback=update_position)
+    GPIO.add_event_detect(Enc_A, GPIO.RISING, callback=update_position)
+    GPIO.add_event_detect(Enc_B, GPIO.RISING, callback=update_position)
 
 def read_encoder():
     return GPIO.input(Enc_A), GPIO.input(Enc_B)
