@@ -160,7 +160,12 @@ def tune_post(steps : int, speed: float, direction : str, direction_override : s
             GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.LOW)
         sleep(speed)
 
-    update_position()
+        # Update it on every rotation
+        update_position()
+
+    # TODO: Remove
+    print(ENCODERS['PALM']['CURRENT_POSITION'])
+    print(ENCODERS['DORSO']['CURRENT_POSITION'])
 
     # Stop the process and return success
     process_happening = False
@@ -168,24 +173,31 @@ def tune_post(steps : int, speed: float, direction : str, direction_override : s
 
 # Function to update the position of the encoders
 def update_position():
-    '''
-    global counter, last_A, last_B
-    if A != last_A or B != last_B:  # Only update on change
-        if A == 1 and B == 0 and last_A == 0:  # Clockwise
-            counter += 1
-        elif A == 0 and B == 1 and last_B == 0:  # Counter-clockwise
-            counter -= 1
-        last_A, last_B = A, B
-    '''
     # Get the current status of the encoders
     palm_a_current, palm_b_current = GPIO.input(GPIO_PINS['PALM']['A']), GPIO.input(GPIO_PINS['PALM']['B'])
-    dorso_a_current, dorso_c_current = GPIO.input(GPIO_PINS['DORSO']['A']), GPIO.input(GPIO_PINS['DORSO']['B'])
+    dorso_a_current, dorso_b_current = GPIO.input(GPIO_PINS['DORSO']['A']), GPIO.input(GPIO_PINS['DORSO']['B'])
 
-    # Log it
-    print (palm_a_current)
-    print (palm_b_current)
-    print (dorso_a_current)
-    print (dorso_c_current)
+    # Update palm (only upon change)
+    if palm_a_current != ENCODERS['PALM']['LAST_A'] or palm_b_current != ENCODERS['PALM']['LAST_B']:  
+        # Act according to the direction of the rotation
+        if palm_a_current == 1 and palm_b_current == 0 and ENCODERS['PALM']['LAST_A'] == 0:
+            ENCODERS['PALM']['CURRENT_POSITION'] += 1
+        elif palm_a_current == 0 and palm_b_current == 1 and ENCODERS['PALM']['LAST_B'] == 0: 
+            ENCODERS['PALM']['CURRENT_POSITION'] -= 1
+
+        # Store current state
+        ENCODERS['PALM']['LAST_A'], ENCODERS['PALM']['LAST_B'] = palm_a_current, palm_b_current == 1
+
+    # Update dorso (only upon change)
+    if dorso_a_current != ENCODERS['DORSO']['LAST_A'] or dorso_b_current != ENCODERS['DORSO']['LAST_B']:  
+        # Act according to the direction of the rotation
+        if dorso_a_current == 1 and dorso_b_current == 0 and ENCODERS['DORSO']['LAST_A'] == 0:
+            ENCODERS['DORSO']['CURRENT_POSITION'] += 1
+        elif dorso_a_current == 0 and dorso_b_current == 1 and ENCODERS['DORSO']['LAST_B'] == 0: 
+            ENCODERS['DORSO']['CURRENT_POSITION'] -= 1
+
+        # Store current state
+        ENCODERS['DORSO']['LAST_A'], ENCODERS['DORSO']['LAST_B'] = dorso_a_current, dorso_b_current == 1
 
 '''
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
