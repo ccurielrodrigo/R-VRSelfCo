@@ -16,6 +16,9 @@ last_B = 0
 Motor_Setp = 15,                        
 Motor_Dir =  14
 
+# Sleep time
+slee_time = 0.0005
+
 def init():
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
@@ -46,10 +49,10 @@ def main():
             print(f"Position: {counter}")
             if counter < 100:
                 GPIO.output(Motor_Setp, GPIO.HIGH)
-                sleep(.0000001)
+                sleep(slee_time)
                 GPIO.output(Motor_Dir, GPIO.LOW)
 
-            sleep(.0000001)
+            sleep(slee_time)
     except KeyboardInterrupt:
         GPIO.cleanup()
         print("Program exited cleanly")
