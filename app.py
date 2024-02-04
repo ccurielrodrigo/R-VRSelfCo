@@ -306,9 +306,9 @@ def setup_control( command : str ):
 
     while not global_condition_met:
         # Check for individual requirements of the dorso and palm sensors
-        if (ENCODERS['DORSO']['CURRENT_POSITION'] >= ENCODERS['DORSO']['MAX_POSITION'] or ENCODERS['DORSO']['CURRENT_POSITION'] <= 0):
+        if ((command == "OPEN" and ENCODERS['DORSO']['CURRENT_POSITION'] >= ENCODERS['DORSO']['MAX_POSITION']) or (command == "CLOSE" and ENCODERS['DORSO']['CURRENT_POSITION'] <= 0)):
             dorso_condition_met = True
-        if (ENCODERS['PALM']['CURRENT_POSITION'] >= ENCODERS['PALM']['MAX_POSITION'] or ENCODERS['PALM']['CURRENT_POSITION'] <= 0):
+        if ((command == "OPEN" and ENCODERS['PALM']['CURRENT_POSITION'] >= ENCODERS['PALM']['MAX_POSITION']) or (command == "CLOSE" and ENCODERS['PALM']['CURRENT_POSITION'] <= 0)):
             palm_condition_met = True
 
         # HIGH step
@@ -324,14 +324,6 @@ def setup_control( command : str ):
         if (not dorso_condition_met):
             GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.LOW)
         sleep(DEBOUNCE_TIME)
-
-        print("Palm information")
-        print(f"   - CURRENT_POSITION {ENCODERS['PALM']['CURRENT_POSITION']}")
-        print(f"   - MAX_POSITION {ENCODERS['PALM']['MAX_POSITION']}")
-
-        print("Dorso information")
-        print(f"   - CURRENT_POSITION {ENCODERS['PALM']['CURRENT_POSITION']}")
-        print(f"   - MAX_POSITION {ENCODERS['PALM']['MAX_POSITION']}")
 
         # Update it on every rotation
         update_position()
