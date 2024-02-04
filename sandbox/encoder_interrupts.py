@@ -42,7 +42,7 @@ def main():
     try:
         init()
         while True:
-            sleep(1)  # Simple debounce - not for production use
+            sleep(.0000001)  # Simple debounce - not for production use
 
     except KeyboardInterrupt:
         GPIO.cleanup()
