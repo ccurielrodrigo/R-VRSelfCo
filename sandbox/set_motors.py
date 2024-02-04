@@ -57,6 +57,8 @@ def main():
                 GPIO.output(Motor_Setp, GPIO.HIGH)
                 sleep(slee_time)
                 GPIO.output(Motor_Setp, GPIO.LOW)
+            else: 
+                print("already there")
 
             sleep(bouncing_time)
     except KeyboardInterrupt:
