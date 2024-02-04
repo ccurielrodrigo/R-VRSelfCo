@@ -18,7 +18,7 @@ Motor_Dir =  14
 
 # Sleep time
 slee_time = 0.0005
-bouncing_time = 0.005
+bouncing_time = 0.001
 steps = 100
 
 def init():
