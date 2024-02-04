@@ -158,7 +158,7 @@ def tune_post(steps : int, speed: float, direction : str, direction_override : s
             GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.LOW)
         if (direction_override == "NORMAL" or direction_override == "CLOSE_ONLY"):
             GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.LOW)
-        sleep(speed)
+        sleep(0.001)
 
         # Update it on every rotation
         update_position()
