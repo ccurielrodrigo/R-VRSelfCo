@@ -51,12 +51,12 @@ def main():
             A, B = read_encoder()
             update_position(A, B)
             print(f"Position: {counter}")
-            if counter < 100:
+            if counter < 10:
                 GPIO.output(Motor_Setp, GPIO.HIGH)
                 sleep(slee_time)
                 GPIO.output(Motor_Setp, GPIO.LOW)
 
-            sleep(slee_time)
+            sleep(0.05)
     except KeyboardInterrupt:
         GPIO.cleanup()
         print("Program exited cleanly")
