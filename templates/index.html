@@ -101,7 +101,7 @@
                     url: '/setup',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({ setup_type }),
+                    data: JSON.stringify({ setup_type: setup_type }),
                     success: function (response) {
                         console.log("Command sent: " + setup_type);
                     },
