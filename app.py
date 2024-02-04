@@ -246,13 +246,13 @@ def setup_limit (setup_type : str):
     process_happening = True
 
     # Set each motor's direction
-    if setup_type == "SET_CLOSE":
+    if setup_type == "SET_OPEN":
         # Indicate this position as the lowest end (set to 0)
         ENCODERS['DORSO']['CURRENT_POSITION'] = 0
         ENCODERS['PALM']['CURRENT_POSITION'] = 0
 
         # Print a signal of success
-        print("Closed position successfully configured")
+        print("Open position successfully configured")
         print("Palm information")
         print(f"   - CURRENT_POSITION {ENCODERS['PALM']['CURRENT_POSITION']}")
         print(f"   - MAX_POSITION {ENCODERS['PALM']['MAX_POSITION']}")
@@ -267,7 +267,7 @@ def setup_limit (setup_type : str):
         ENCODERS['PALM']['MAX_POSITION'] = ENCODERS['PALM']['CURRENT_POSITION']
         
         # Print a signal of success
-        print("Open position successfully configured")
+        print("Closed position successfully configured")
         print("Palm information")
         print(f"   - CURRENT_POSITION {ENCODERS['PALM']['CURRENT_POSITION']}")
         print(f"   - MAX_POSITION {ENCODERS['PALM']['MAX_POSITION']}")
@@ -306,9 +306,9 @@ def setup_control( command : str ):
 
     while not global_condition_met:
         # Check for individual requirements of the dorso and palm sensors
-        if ((command == "OPEN" and ENCODERS['DORSO']['CURRENT_POSITION'] >= ENCODERS['DORSO']['MAX_POSITION']) or (command == "CLOSE" and ENCODERS['DORSO']['CURRENT_POSITION'] <= 0)):
+        if ((command == "CLOSE" and ENCODERS['DORSO']['CURRENT_POSITION'] >= ENCODERS['DORSO']['MAX_POSITION']) or (command == "OPEN" and ENCODERS['DORSO']['CURRENT_POSITION'] <= 0)):
             dorso_condition_met = True
-        if ((command == "OPEN" and ENCODERS['PALM']['CURRENT_POSITION'] >= ENCODERS['PALM']['MAX_POSITION']) or (command == "CLOSE" and ENCODERS['PALM']['CURRENT_POSITION'] <= 0)):
+        if ((command == "CLOSE" and ENCODERS['PALM']['CURRENT_POSITION'] >= ENCODERS['PALM']['MAX_POSITION']) or (command == "OPEN" and ENCODERS['PALM']['CURRENT_POSITION'] <= 0)):
             palm_condition_met = True
 
         # HIGH step

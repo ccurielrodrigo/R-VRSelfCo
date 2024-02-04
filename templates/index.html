@@ -39,15 +39,15 @@
             <label for="direction">Direction:</label>
             <select id="direction" name="direction" required>
                 <option value="OPEN">Open</option>
-                <option value="CLOSE">Close</option>
+                <option selected value="CLOSE">Close</option>
             </select>
         </div>
         <div class="form-row">
             <label for="direction-override">Direction override:</label>
             <select id="direction-override" name="direction-override" required>
-                <option value="NORMAL">Normal</option>
-                <option value="OPEN_ONLY">Open only</option>
-                <option value="CLOSE_ONLY">Close only</option>
+                <option value="NORMAL">None</option>
+                <option value="OPEN_ONLY">Dorso only</option>
+                <option value="CLOSE_ONLY">Palm only</option>
             </select>
         </div>
         <button type="submit">Submit</button>
