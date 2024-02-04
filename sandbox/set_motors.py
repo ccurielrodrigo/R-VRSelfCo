@@ -18,6 +18,8 @@ Motor_Dir =  14
 
 # Sleep time
 slee_time = 0.0005
+bouncing_time = 0.005
+steps = 100
 
 def init():
     GPIO.setwarnings(False)
@@ -51,12 +53,12 @@ def main():
             A, B = read_encoder()
             update_position(A, B)
             print(f"Position: {counter}")
-            if counter < 10:
+            if counter < steps:
                 GPIO.output(Motor_Setp, GPIO.HIGH)
                 sleep(slee_time)
                 GPIO.output(Motor_Setp, GPIO.LOW)
 
-            sleep(0.05)
+            sleep(bouncing_time)
     except KeyboardInterrupt:
         GPIO.cleanup()
         print("Program exited cleanly")
