@@ -6,8 +6,8 @@ Motor_Dir = 8  # Motor direction pin
 Motor_Step = 10  # Motor step (or enable) pin
 
 # Encoder GPIO pins
-Enc_A = 11
-Enc_B = 13
+Enc_A = 19
+Enc_B = 21
 
 # Target steps
 target_steps = 100
@@ -30,33 +30,21 @@ def motor_step():
 def motor_forward(steps):
     """Moves the motor forward a specific number of steps."""
     GPIO.output(Motor_Dir, GPIO.HIGH)
-    for _ in range(steps):
+    for step in range(steps):
         motor_step()
+        # After each step, print the encoder state to verify its reading
+        enc_state = read_encoder()
+        print(f"Step {step+1}: Encoder State: A={enc_state[0]}, B={enc_state[1]}")
 
 def read_encoder():
     """Reads the current state of the encoder."""
     return GPIO.input(Enc_A), GPIO.input(Enc_B)
 
-def measure_steps():
-    """Measures steps using the encoder by polling its state changes."""
-    last_state = read_encoder()
-    count = 0
-
-    while count < target_steps:
-        current_state = read_encoder()
-        if current_state != last_state:
-            count += 1
-            last_state = current_state
-        sleep(0.005)  # Small delay to avoid missing encoder changes
-
-    return count
-
 def main():
     init()
-    print("Moving motor forward, attempting to measure with encoder...")
+    print("Moving motor forward, monitoring encoder states...")
     motor_forward(target_steps)  # Command the motor to move forward 100 steps
-    measured_steps = measure_steps()  # Attempt to measure these steps with the encoder
-    print(f"Motor movement attempted for {target_steps} steps, measured {measured_steps} steps.")
+    print("Motor movement complete. Check the log for encoder states.")
     GPIO.cleanup()
 
 if __name__ == '__main__':
