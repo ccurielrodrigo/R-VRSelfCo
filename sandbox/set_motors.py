@@ -6,8 +6,8 @@ Motor_Dir = 8  # Motor direction pin
 Motor_Step = 10  # Motor step (or enable) pin
 
 # Encoder GPIO pins
-Enc_A = 19
-Enc_B = 21
+Enc_A = 11
+Enc_B = 13
 
 # Target steps
 target_steps = 100
