@@ -247,7 +247,7 @@ def setup_limit (setup_type : str):
     process_happening = True
 
     # Set each motor's direction
-    if setup_type == "SET_OPEN":
+    if setup_type == "SET_CLOSE":
         # Indicate this position as the lowest end (set to 0)
         ENCODERS['DORSO']['CURRENT_POSITION'] = 0
         ENCODERS['PALM']['CURRENT_POSITION'] = 0
@@ -297,6 +297,9 @@ def setup_control( command : str ):
             dorso_condition_met = True
         if (ENCODERS['PALM']['CURRENT_POSITION'] >= ENCODERS['PALM']['MAX_POSITION'] or ENCODERS['PALM']['CURRENT_POSITION'] <= 0):
             palm_condition_met = True
+
+        print(dorso_condition_met)
+        print(palm_condition_met)
 
         # HIGH step
         if (not palm_condition_met):
