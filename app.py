@@ -293,9 +293,13 @@ def setup_control( command : str ):
 
     while not global_condition_met:
         # Check for individual requirements of the dorso and palm sensors
-        if (ENCODERS['DORSO']['CURRENT_POSITION'] >= ENCODERS['DORSO']['MAX_POSITION'] or ENCODERS['DORSO']['CURRENT_POSITION'] <= 0):
+        if (ENCODERS['DORSO']['CURRENT_POSITION'] >= ENCODERS['DORSO']['MAX_POSITION'] and ENCODERS['DORSO']['CURRENT_POSITION'] <= 0):
+            print(ENCODERS['DORSO']['CURRENT_POSITION'])
+            print(ENCODERS['DORSO']['MAX_POSITION'])
             dorso_condition_met = True
         if (ENCODERS['PALM']['CURRENT_POSITION'] >= ENCODERS['PALM']['MAX_POSITION'] or ENCODERS['PALM']['CURRENT_POSITION'] <= 0):
+            print(ENCODERS['PALM']['CURRENT_POSITION'])
+            print(ENCODERS['PALM']['MAX_POSITION'])
             palm_condition_met = True
 
         print(dorso_condition_met)
