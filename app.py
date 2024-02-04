@@ -257,8 +257,8 @@ def setup_limit (setup_type : str):
         ENCODERS['PALM']['MAX_POSITION'] = ENCODERS['PALM']['CURRENT_POSITION']
         
         # Print a signal of success
-        print(f'Palm encoder max set as {ENCODERS['PALM']['MAX_POSITION']}')
-        print(f'Dorso encoder max set as {ENCODERS['DORSO']['MAX_POSITION']}')
+        print(f"Palm encoder max set as {ENCODERS['PALM']['MAX_POSITION']}")
+        print(f"Dorso encoder max set as {ENCODERS['DORSO']['MAX_POSITION']}")
 
 
     # Stop the process and return success
