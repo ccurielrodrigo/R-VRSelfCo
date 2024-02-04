@@ -85,7 +85,7 @@ def tune_post():
     return {"status": status}, 200
 
 # Setup the open or closed state
-@app.route('/setup', methods=['POST'])
+''' @app.route('/setup', methods=['POST'])
 def setup_post():
     # Parse the request's body
     data = request.get_json()
@@ -123,6 +123,7 @@ def control_post():
 
     # Return a success response
     return {"status": status}, 200
+'''
 
 '''
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
