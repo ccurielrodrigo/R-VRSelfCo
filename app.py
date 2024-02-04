@@ -160,9 +160,25 @@ def tune_post(steps : int, speed: float, direction : str, direction_override : s
             GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.LOW)
         sleep(speed)
 
+    update_position()
+
     # Stop the process and return success
     process_happening = False
     return True
+
+# Function to update the position of the encoders
+def update_position():
+    '''
+    global counter, last_A, last_B
+    if A != last_A or B != last_B:  # Only update on change
+        if A == 1 and B == 0 and last_A == 0:  # Clockwise
+            counter += 1
+        elif A == 0 and B == 1 and last_B == 0:  # Counter-clockwise
+            counter -= 1
+        last_A, last_B = A, B
+    '''
+    ENCODERS['PALM']['CURRENT_POSITION'] += 1
+    print( ENCODERS['PALM']['CURRENT_POSITION'] )
 
 '''
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
