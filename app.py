@@ -177,8 +177,15 @@ def update_position():
             counter -= 1
         last_A, last_B = A, B
     '''
-    ENCODERS['PALM']['CURRENT_POSITION'] += 1
-    print( ENCODERS['PALM']['CURRENT_POSITION'] )
+    # Get the current status of the encoders
+    palm_a_current, palm_b_current = GPIO.input(GPIO_PINS['PALM']['A']), GPIO.input(GPIO_PINS['PALM']['B'])
+    dorso_a_current, dorso_c_current = GPIO.input(GPIO_PINS['DORSO']['A']), GPIO.input(GPIO_PINS['DORSO']['B'])
+
+    # Log it
+    print (palm_a_current)
+    print (palm_b_current)
+    print (dorso_a_current)
+    print (dorso_c_current)
 
 '''
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
