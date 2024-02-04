@@ -96,14 +96,14 @@
             });
 
             // Setup 
-            function sendSetupCommand(command) {
+            function sendSetupCommand(setup_type) {
                 $.ajax({
                     url: '/setup',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({ command: command }),
+                    data: JSON.stringify({ setup_type }),
                     success: function (response) {
-                        console.log("Command sent: " + command);
+                        console.log("Command sent: " + setup_type);
                     },
                     error: function (response) {
                         alert("Error: " + response.responseText);
