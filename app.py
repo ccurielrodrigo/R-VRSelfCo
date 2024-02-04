@@ -57,6 +57,7 @@ GPIO.setup(GPIO_PINS['DORSO']['B'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # Encoder/Motor-related
 MOTOR_SPEED = 0.0005
 DEBOUNCE_TIME = 0.001
+DEFAULT_SPEED = 0.0005
 
 # ------------------------------------------------------> Global variables
 # Encoder positions
@@ -122,6 +123,8 @@ def tune_post():
 def setup():
     # Parse the request's body
     data = request.get_json()
+
+    print (data)
 
     # Obtain the number of steps and direction
     setup_type = data.get('setup_type')
@@ -300,7 +303,7 @@ def setup_control( command : str ):
             GPIO.output(GPIO_PINS['PALM']['STEP'], GPIO.HIGH)
         if (not dorso_condition_met):
             GPIO.output(GPIO_PINS['DORSO']['STEP'], GPIO.HIGH)
-        sleep(speed)
+        sleep(DEFAULT_SPEED)
 
         # LOW step
         if (not palm_condition_met):
