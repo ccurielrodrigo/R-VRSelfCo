@@ -332,6 +332,8 @@ def setup_control( command : str ):
         if (dorso_condition_met and palm_condition_met):
             global_condition_met = True
 
+    print (f"Command {command} finished")
+
     # Stop the process and return success
     process_happening = False
     return True
