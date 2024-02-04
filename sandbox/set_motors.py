@@ -27,6 +27,10 @@ def init():
     GPIO.setup(Motor_Setp, GPIO.OUT)
     GPIO.setup(Motor_Dir, GPIO.OUT)
 
+    # For direction
+    GPIO.output(Motor_Dir, 1)
+
+
 def read_encoder():
     return GPIO.input(Enc_A), GPIO.input(Enc_B)
 
@@ -50,7 +54,7 @@ def main():
             if counter < 100:
                 GPIO.output(Motor_Setp, GPIO.HIGH)
                 sleep(slee_time)
-                GPIO.output(Motor_Dir, GPIO.LOW)
+                GPIO.output(Motor_Setp, GPIO.LOW)
 
             sleep(slee_time)
     except KeyboardInterrupt:
