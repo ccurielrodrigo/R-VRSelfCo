@@ -351,10 +351,10 @@ def buzz_alert(time_to_buzz : float):
         while 1:
             for dc in range(0, 101, 5):
                 p.ChangeDutyCycle(dc)
-                time.sleep(0.1)
+                sleep(0.1)
             for dc in range(100, -1, -5):
                 p.ChangeDutyCycle(dc)
-                time.sleep(0.1)
+                sleep(0.1)
     except KeyboardInterrupt:
         pass
     p.stop()
