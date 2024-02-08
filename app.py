@@ -54,10 +54,13 @@ GPIO.setup(GPIO_PINS['PALM']['A'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(GPIO_PINS['PALM']['B'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(GPIO_PINS['DORSO']['A'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(GPIO_PINS['DORSO']['B'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# Buzzer
+GPIO.setup(GPIO_PINS['BUZZER'], GPIO.OUT)
 
 # Encoder/Motor-related
 DEBOUNCE_TIME = 0.001
 DEFAULT_SPEED = 0.0005
+BUZZ_TIME = 0.05
 
 # ------------------------------------------------------> Global variables
 # Encoder positions
@@ -153,9 +156,9 @@ def control():
         return {"error": "Missing 'command'"}, 400
 
     # Perform the actual step increase
-    buzz_alert(0.05)
+    buzz_alert(BUZZ_TIME)
     status = setup_control(command)
-    buzz_alert(0.05)
+    buzz_alert(BUZZ_TIME)
 
     # Return a success response
     return {"status": status}, 200
