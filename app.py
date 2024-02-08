@@ -153,9 +153,9 @@ def control():
         return {"error": "Missing 'command'"}, 400
 
     # Perform the actual step increase
-    buzz_alert(1)
+    buzz_alert(0.05)
     status = setup_control(command)
-    buzz_alert(1)
+    buzz_alert(0.05)
 
     # Return a success response
     return {"status": status}, 200
@@ -342,7 +342,7 @@ def setup_control( command : str ):
     return True
 
 # Generate an autitive alert for starting and ending processses
-def buzz_alert(time_to_buzz : number):
+def buzz_alert(time_to_buzz : float):
     GPIO.output(GPIO_PINS['BUZZER'], 1)
     sleep(time_to_buzz)
     GPIO.output(GPIO_PINS['BUZZER'], 0)
