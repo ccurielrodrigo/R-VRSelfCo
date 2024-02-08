@@ -60,7 +60,7 @@ GPIO.setup(GPIO_PINS['BUZZER'], GPIO.OUT)
 # Encoder/Motor-related
 DEBOUNCE_TIME = 0.001
 DEFAULT_SPEED = 0.0005
-BUZZ_TIME = 0.05
+BUZZ_TIME = 5
 
 # ------------------------------------------------------> Global variables
 # Encoder positions
@@ -343,12 +343,12 @@ def setup_control( command : str ):
     process_happening = False
     return True
 
-# Generate an autitive alert for starting and ending processses
-def buzz_alert(time_to_buzz : float):
+# Generate an auditory alert for starting and ending processes
+def buzz_alert(time_to_buzz: float):
     # Create a PWM instance on the pin at 1000 Hz frequency
     p = GPIO.PWM(GPIO_PINS['BUZZER'], 1000)  # 1000 Hz is a good frequency for a beep sound
     
-    # Start the PWM with 50% duty cycle (volume)
+    # Start the PWM with 100% duty cycle (volume)
     p.start(100)
     
     # Keep the beep on for the specified duration
