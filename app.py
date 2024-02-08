@@ -82,6 +82,9 @@ ENCODERS = {
 # Global variable to check if there is any process happening (avoids command override and mechanical issues)
 process_happening = False
 
+# Buzzer
+buzzer = GPIO.PWM(GPIO_PINS['BUZZER'], 1400)  # 1000 Hz is a good frequency for a beep sound
+
 # Instance the app
 app = Flask(__name__)
 
@@ -345,17 +348,14 @@ def setup_control( command : str ):
 
 # Generate an auditory alert for starting and ending processes
 def buzz_alert(time_to_buzz: float):
-    # Create a PWM instance on the pin at 1000 Hz frequency
-    p = GPIO.PWM(GPIO_PINS['BUZZER'], 1000)  # 1000 Hz is a good frequency for a beep sound
-    
     # Start the PWM with 100% duty cycle (volume)
-    p.start(100)
+    buzzer.start(100)
     
     # Keep the beep on for the specified duration
     sleep(time_to_buzz)
     
     # Stop the PWM
-    p.stop()
+    buzzer.stop()
 
 '''
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
