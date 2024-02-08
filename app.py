@@ -354,7 +354,7 @@ def buzz_alert(time_to_buzz: float):
     # Keep the beep on for the specified duration
     for dc in range(0, 101, 5):
         buzzer.ChangeDutyCycle(dc)
-        time.sleep(0.1)
+        sleep(0.1)
     
     # Stop the PWM
     buzzer.stop()
