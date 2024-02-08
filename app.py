@@ -355,6 +355,9 @@ def buzz_alert(time_to_buzz: float):
     for dc in range(0, 101, 5):
         buzzer.ChangeDutyCycle(dc)
         sleep(0.1)
+    for dc in range(100, -1, -5):
+        buzzer.ChangeDutyCycle(dc)
+        sleep(0.1)
     
     # Stop the PWM
     buzzer.stop()
