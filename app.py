@@ -352,10 +352,7 @@ def buzz_alert(time_to_buzz: float):
     buzzer.start(0)
     
     # Keep the beep on for the specified duration
-    for dc in range(0, 101, 5):
-        buzzer.ChangeDutyCycle(dc)
-        sleep(0.1)
-    for dc in range(100, -1, -5):
+    for dc in range(0, 101, 10):
         buzzer.ChangeDutyCycle(dc)
         sleep(0.1)
     
