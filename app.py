@@ -345,20 +345,17 @@ def setup_control( command : str ):
 
 # Generate an autitive alert for starting and ending processses
 def buzz_alert(time_to_buzz : float):
-    p = GPIO.PWM(32, 100)
-    p.start(0)
-    try:
-        while 1:
-            for dc in range(0, 101, 5):
-                p.ChangeDutyCycle(dc)
-                sleep(0.1)
-            for dc in range(100, -1, -5):
-                p.ChangeDutyCycle(dc)
-                sleep(0.1)
-    except KeyboardInterrupt:
-        pass
+    # Create a PWM instance on the pin at 1000 Hz frequency
+    p = GPIO.PWM(GPIO_PINS['BUZZER'], 1000)  # 1000 Hz is a good frequency for a beep sound
+    
+    # Start the PWM with 50% duty cycle (volume)
+    p.start(100)
+    
+    # Keep the beep on for the specified duration
+    sleep(time_to_buzz)
+    
+    # Stop the PWM
     p.stop()
-    GPIO.cleanup()
 
 '''
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
