@@ -156,7 +156,6 @@ def control():
         return {"error": "Missing 'command'"}, 400
 
     # Perform the actual step increase
-    buzz_alert(BUZZ_TIME)
     status = setup_control(command)
     buzz_alert(BUZZ_TIME)
 
@@ -346,9 +345,16 @@ def setup_control( command : str ):
 
 # Generate an autitive alert for starting and ending processses
 def buzz_alert(time_to_buzz : float):
-    GPIO.output(GPIO_PINS['BUZZER'], 1)
-    sleep(time_to_buzz)
-    GPIO.output(GPIO_PINS['BUZZER'], 0)
+    p = GPIO.PWM(32, 100)
+    p.start(0)
+    try:
+        while 1:
+            for dc in range(0, 101, 5):
+                p.ChangeDutyCycle(dc)
+                time.sleep(0.1)
+            for dc in range(100, -1, -5):
+                p.ChangeDutyCycle(dc)
+                time.sleep(0.1)
 
 '''
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
