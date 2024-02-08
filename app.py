@@ -348,7 +348,7 @@ def setup_control( command : str ):
 # Generate an auditory alert for starting and ending processes
 def buzz_alert():
     # Start the PWM
-    buzzer.start(0)
+    buzzer.start(100)
     
     # Keep the beep on for the specified duration
     for dc in range(0, 101, 50):
