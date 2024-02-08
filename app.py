@@ -36,6 +36,7 @@ GPIO_PINS = {
         "A" : 19,
         "B" : 21
     },
+    'BUZZER' : 32
 }           
 
 # Board configuration
@@ -152,7 +153,9 @@ def control():
         return {"error": "Missing 'command'"}, 400
 
     # Perform the actual step increase
+    buzz_alert(1)
     status = setup_control(command)
+    buzz_alert(1)
 
     # Return a success response
     return {"status": status}, 200
@@ -337,6 +340,12 @@ def setup_control( command : str ):
     # Stop the process and return success
     process_happening = False
     return True
+
+# Generate an autitive alert for starting and ending processses
+def buzz_alert(time_to_buzz : number):
+    GPIO.output(GPIO_PINS['BUZZER'], 1)
+    sleep(time_to_buzz)
+    GPIO.output(GPIO_PINS['BUZZER'], 0)
 
 '''
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
