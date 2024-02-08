@@ -60,7 +60,6 @@ GPIO.setup(GPIO_PINS['BUZZER'], GPIO.OUT)
 # Encoder/Motor-related
 DEBOUNCE_TIME = 0.001
 DEFAULT_SPEED = 0.0005
-BUZZ_TIME = 5
 
 # ------------------------------------------------------> Global variables
 # Encoder positions
@@ -160,7 +159,7 @@ def control():
 
     # Perform the actual step increase
     status = setup_control(command)
-    buzz_alert(BUZZ_TIME)
+    buzz_alert()
 
     # Return a success response
     return {"status": status}, 200
@@ -347,12 +346,12 @@ def setup_control( command : str ):
     return True
 
 # Generate an auditory alert for starting and ending processes
-def buzz_alert(time_to_buzz: float):
+def buzz_alert():
     # Start the PWM
     buzzer.start(0)
     
     # Keep the beep on for the specified duration
-    for dc in range(0, 101, 10):
+    for dc in range(0, 101, 50):
         buzzer.ChangeDutyCycle(dc)
         sleep(0.1)
     
