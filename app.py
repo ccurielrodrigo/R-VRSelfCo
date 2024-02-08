@@ -83,7 +83,7 @@ ENCODERS = {
 process_happening = False
 
 # Buzzer
-buzzer = GPIO.PWM(GPIO_PINS['BUZZER'], 1400)  # 1000 Hz is a good frequency for a beep sound
+buzzer = GPIO.PWM(GPIO_PINS['BUZZER'], 100)  # 100 Hz is a good frequency for a beep sound
 
 # Instance the app
 app = Flask(__name__)
