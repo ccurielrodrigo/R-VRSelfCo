@@ -164,6 +164,14 @@ def control():
     # Return a success response
     return {"status": status}, 200
 
+# Beep the exotendon
+@app.route('/beep', methods=['POST'])
+def control():
+    buzz_alert()
+
+    # Return a success response
+    return {"status": status}, 200
+
 
     
 '''

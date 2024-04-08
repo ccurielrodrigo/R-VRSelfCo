@@ -67,6 +67,13 @@
         <button type="button" id="close" onclick="sendCommand('CLOSE')">Close</button>
     </form>
 
+    <!-- Exotendon control -->
+    <h2>Sound</h2>
+    <form id="buzz-form">
+        <button type="submit">Beep</button>
+    </form>
+
+
     <script>
         $(document).ready(function () {
             // Fine tune
@@ -126,6 +133,24 @@
                     }
                 });
             }
+
+            // Fine tune
+            $("#buzz-form").submit(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    url: '/beep',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                    }),
+                    success: function (response) {
+                        console.log("Buzzed ");
+                    },
+                    error: function (response) {
+                        alert("Error: " + response.responseText);
+                    }
+                });
+            });
 
             // Add global references for the functions
             window.sendSetupCommand = sendSetupCommand;
