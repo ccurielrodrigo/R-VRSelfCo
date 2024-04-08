@@ -170,7 +170,7 @@ def beep():
     buzz_alert()
 
     # Return a success response
-    return {"status": status}, 200
+    return {"status": 'Success'}, 200
 
 
     
