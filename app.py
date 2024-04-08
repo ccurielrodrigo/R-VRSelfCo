@@ -166,7 +166,7 @@ def control():
 
 # Beep the exotendon
 @app.route('/beep', methods=['POST'])
-def control():
+def beep():
     buzz_alert()
 
     # Return a success response
