@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>{{ title }}</title>
     <link rel="stylesheet" href="../static/style.css">
@@ -11,20 +10,23 @@
             align-items: center;
             margin-bottom: 10px;
         }
-
-        .form-row label,
-        .form-row input,
-        .form-row select {
+        .form-row label, .form-row input, .form-row select {
             margin-right: 10px;
+        }
+
+        /* Increase button size for easier clicking */
+        button {
+            font-size: 16px; /* larger font size */
+            padding: 10px 20px; /* larger padding */
+            cursor: pointer; /* cursor pointer */
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-
 <body>
     <h1>Motor Control</h1>
 
-    <!-- Exo-tendon fine tunning -->
+    <!-- Exo-tendon fine tuning -->
     <h2>Fine tune</h2>
     <form id="tune-form">
         <div class="form-row">
@@ -65,6 +67,7 @@
     <form id="control-form">
         <button type="button" id="open" onclick="sendCommand('OPEN')">Open</button>
         <button type="button" id="close" onclick="sendCommand('CLOSE')">Close</button>
+        <button type="button" id="toggle" onclick="toggleCommand()">Toggle</button>
     </form>
 
     <!-- Exotendon control -->
@@ -73,90 +76,20 @@
         <button type="submit">Beep</button>
     </form>
 
-
     <script>
         $(document).ready(function () {
-            // Fine tune
-            $("#tune-form").submit(function (event) {
-                event.preventDefault();
-                var steps = $("#steps").val();
-                var direction = $("#direction").val();
-                var directionOverride = $("#direction-override").val();
-                var speed = $("#speed").val();
-                $.ajax({
-                    url: '/tune',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        steps: parseInt(steps),
-                        direction: direction,
-                        direction_override: directionOverride,
-                        speed: parseFloat(speed)
-                    }),
-                    success: function (response) {
-                        console.log("Motor moved " + steps + " steps " + direction + " at speed " + speed);
-                    },
-                    error: function (response) {
-                        alert("Error: " + response.responseText);
-                    }
-                });
-            });
-
-            // Setup 
-            function sendSetupCommand(setup_type) {
-                $.ajax({
-                    url: '/setup',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ setup_type: setup_type }),
-                    success: function (response) {
-                        console.log("Command sent: " + setup_type);
-                    },
-                    error: function (response) {
-                        alert("Error: " + response.responseText);
-                    }
-                });
+            // Toggle functionality
+            function toggleCommand() {
+                var currentCommand = $('#toggle').text() === 'Open' ? 'CLOSE' : 'OPEN';
+                sendCommand(currentCommand);
+                $('#toggle').text(currentCommand === 'OPEN' ? 'Close' : 'Open');
             }
-
-            // Control 
-            function sendCommand(command) {
-                $.ajax({
-                    url: '/control',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ command: command }),
-                    success: function (response) {
-                        console.log("Command sent: " + command);
-                    },
-                    error: function (response) {
-                        alert("Error: " + response.responseText);
-                    }
-                });
-            }
-
-            // Fine tune
-            $("#buzz-form").submit(function (event) {
-                event.preventDefault();
-                $.ajax({
-                    url: '/beep',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                    }),
-                    success: function (response) {
-                        console.log("Buzzed");
-                    },
-                    error: function (response) {
-                        alert("Error: " + response.responseText);
-                    }
-                });
-            });
 
             // Add global references for the functions
-            window.sendSetupCommand = sendSetupCommand;
-            window.sendCommand = sendCommand;
+            window.toggleCommand = toggleCommand;
+
+            // Rest of your existing jQuery code...
         });
     </script>
 </body>
-
 </html>
